@@ -1,95 +1,147 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Image from "next/image";
+import styles from "./page.module.css";
+import { Row, Col, Space, Button, Typography } from "antd";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [buttonPosition, setButtonPosition] = useState({
+    x: "auto",
+    y: "auto",
+  });
+
+  useEffect(() => {
+    const updateButtonPosition = () => {
+      const yesButton = document.getElementById("yesButton");
+      const noButton = document.getElementById("noButton");
+      if (yesButton && noButton) {
+        
+        const buttonWidth = noButton.offsetWidth;
+        const buttonHeight = noButton.offsetHeight;
+
+        const maxX = window.innerWidth - buttonWidth;
+        const maxY = window.innerHeight - buttonHeight;
+
+        const x = yesButton.offsetLeft + yesButton.offsetWidth + 10; // 10 is just for spacing
+        const y = Math.random() * maxY;
+
+        setButtonPosition({ x, y });
+      }
+    };
+
+    window.addEventListener("resize", updateButtonPosition);
+
+    return () => {
+      // Cleanup event listener on component unmount
+      window.removeEventListener("resize", updateButtonPosition);
+    };
+  // Call the function to set the initial position
+  // updateButtonPosition();
+
+  // window.addEventListener("resize", updateButtonPosition);
+
+  // return () => {
+  //   // Cleanup event listener on component unmount
+  //   window.removeEventListener("resize", updateButtonPosition);
+  // };
+  }, []); // Empty dependency array ensures this runs only once
+
+  const moveButton = () => {
+    const button = document.getElementById('noButton');
+    if (button) {
+      const buttonWidth = button.offsetWidth;
+      const buttonHeight = button.offsetHeight;
+
+      const maxX = window.innerWidth - buttonWidth;
+      const maxY = window.innerHeight - buttonHeight;
+
+      const maxWidth = 500; // Adjust based on your constraints
+      const maxHeight = 500; // Adjust based on your constraints
+
+      const x = Math.random() * Math.min(maxX, maxWidth);
+      const y = Math.random() * Math.min(maxY, maxHeight);
+
+      setButtonPosition({ x, y });
+    }
+  };
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <Row className={styles.main}>
+      <Col>
+        <h1 className="text">Would you like to go on a date with me ?</h1>
+        <div className={styles.gif_container}>
+          <Image
+            src="/firstBear.gif"
+            alt="Next.js Logo"
+            width={250}
+            height={300}
+            priority
+          />
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        <div className={styles.buttons}>
+            <Button
+              id="yesButton"
+              shape="round"
+              size={"middle"}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                backgroundColor: "#b366ff",
+                transition: "backgroundColor 0.3s ease",
+                border: "none",
+                boxShadow:
+                  "0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 10px rgba(0, 0, 0, 0.1)",
+                  position:"absolute",
+                  marginRight:"150px",
+              }}
+            >
+              <Image src="heart.svg" height={20} width={21} />
+              <Typography
+                style={{
+                  padding: "4px",
+                  color: "#f6aca2",
+                  fontFamily: "Nunito",
+                  fontWeight: "bolder",
+                  fontSize: "18px",
+                }}
+              >
+                YES
+              </Typography>
+            </Button>
+            <Button
+              id="noButton"
+              shape="round"
+              size={"middle"}
+              onMouseOver={moveButton}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                backgroundColor: "#b366ff",
+                transition: "0.3s",
+                border: "none",
+                boxShadow:
+                  "0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 10px rgba(0, 0, 0, 0.1)",
+                left: `${ buttonPosition.x}px`,
+                top: `${buttonPosition.y}px`,
+                position: "absolute",
+                marginLeft:"150px",
+                
+              }}
+            >
+              <Image src="brokenHeart.svg" height={20} width={20} />
+              <Typography
+                style={{
+                  padding: "4px",
+                  color: "#f6aca2",
+                  fontFamily: "Nunito",
+                  fontWeight: "bolder",
+                  fontSize: "18px",
+                }}
+              >
+                NO
+              </Typography>
+            </Button>
+        </div>
+      </Col>
+    </Row>
+  );
 }
