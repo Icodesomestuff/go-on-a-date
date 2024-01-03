@@ -3,8 +3,11 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { Row, Col, Space, Button, Typography } from "antd";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+
 
 export default function Home() {
+  const { push } = useRouter();
   const [buttonPosition, setButtonPosition] = useState({
     x: "auto",
     y: "auto",
@@ -35,15 +38,7 @@ export default function Home() {
       // Cleanup event listener on component unmount
       window.removeEventListener("resize", updateButtonPosition);
     };
-  // Call the function to set the initial position
-  // updateButtonPosition();
 
-  // window.addEventListener("resize", updateButtonPosition);
-
-  // return () => {
-  //   // Cleanup event listener on component unmount
-  //   window.removeEventListener("resize", updateButtonPosition);
-  // };
   }, []); // Empty dependency array ensures this runs only once
 
   const moveButton = () => {
@@ -64,6 +59,9 @@ export default function Home() {
       setButtonPosition({ x, y });
     }
   };
+  const onYesClick = () =>{
+push("/yes")
+  }
   return (
     <Row className={styles.main}>
       <Col>
@@ -93,6 +91,7 @@ export default function Home() {
                   position:"absolute",
                   marginRight:"150px",
               }}
+              onClick={onYesClick}
             >
               <Image src="heart.svg" height={20} width={21} />
               <Typography
